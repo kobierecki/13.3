@@ -22,7 +22,7 @@ process.stdin.on('readable', function(){
            break;
            case 'time':
             process.stdout.write('Enter seconds value\n');
-            Time.print();
+            Time.print(input);
            break;
            default:
             process.stderr.write('Wrong command!' + "\n");
