@@ -1,14 +1,11 @@
 
-function getConvertedTime(){
-    process.stdin.on('readable', function(){
-    var input = process.stdin.read();
-    if(input !== null){
+function getConvertedTime(answer){
+    if(answer !== null){
         var date = new Date(null);
         date.setSeconds(input);
-        var result = date.toISOString().substr(11,8);
+        var result = date.toISOString().substr(11,2) + ' hours ' + date.toISOString().substr(14,2) + ' minutes ' +  date.toISOString().substr(17,2) + ' seconds ';
         console.log(result);
-        }
-    });
+    }
 }
 
 exports.print = getConvertedTime;
