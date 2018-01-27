@@ -21,8 +21,16 @@ process.stdin.on('readable', function(){
             OSinfo.print();
            break;
            case 'time':
-            process.stdout.write('Enter seconds value\n');
-            Time.print(input);
+            var readline = require('readline');
+            var numberOfSeconds = readline.createInterface({
+                input: process.stdin,
+                output: process.stdout
+            });
+            numberOfSeconds.question('Enter seconds value\n', (answer) => {
+                Time.print(answer);
+                numberOfSeconds.close();
+            });
+            
            break;
            default:
             process.stderr.write('Wrong command!' + "\n");
