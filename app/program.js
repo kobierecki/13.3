@@ -1,11 +1,21 @@
 var OSinfo = require('../modules/OSinfo');
 var Time = require('../modules/Time');
+var EventEmitter = require("events").EventEmitter;
+
+var emitter = new EventEmitter();
+emitter.on("beforeCommand", function (instruction){
+    console.log('You wrote: ' + instruction + ', trying to run command');
+});
+emitter.on("afterCommand", function(){
+    console.log('Finished command');
+});
 
 process.stdin.setEncoding('utf-8');
 process.stdin.on('readable', function(){
     var input = process.stdin.read();
     if(input !== null){
         var instruction = input.toString().trim();
+        emitter.emit('beforeCommand', instruction);
         switch (instruction){
            case 'exit':
             process.stdout.write('Quitting app');
@@ -22,11 +32,8 @@ process.stdin.on('readable', function(){
            break;
            case 'time':
             var readline = require('readline');
-            var numberOfSeconds = readline.createInterface({
-                input: process.stdin,
-                output: process.stdout
-            });
-            numberOfSeconds.question('Enter seconds value\n', (answer) => {
+            var numberOfSeconds = readline.createInterface(process.stdin, process.stdout);
+            numberOfSeconds.question('Enter seconds value\n', function(answer){
                 Time.print(answer);
                 numberOfSeconds.close();
             });
@@ -35,7 +42,8 @@ process.stdin.on('readable', function(){
            default:
             process.stderr.write('Wrong command!' + "\n");
            break;
-        }
+        };
+        emitter.emit('afterCommand');
     }   
 });
 
